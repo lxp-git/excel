@@ -143,8 +143,7 @@ class Excel {
       _sheetMap[sheet1] = _sheetMap[existingSheetObject.sheetName];
 
       if (_isContain(_cellStyleReferenced[existingSheetObject.sheetName])) {
-        _cellStyleReferenced[sheet1] = Map<String, int>.from(
-            _cellStyleReferenced[existingSheetObject.sheetName]);
+        _cellStyleReferenced[sheet1] = Map<String, int>.from(_cellStyleReferenced[existingSheetObject.sheetName]);
       }
     }
   }
@@ -180,8 +179,7 @@ class Excel {
       this[toSheet] = this[fromSheet];
     }
     if (_isContain(_cellStyleReferenced[fromSheet])) {
-      _cellStyleReferenced[toSheet] =
-          Map<String, int>.from(_cellStyleReferenced[fromSheet]);
+      _cellStyleReferenced[toSheet] = Map<String, int>.from(_cellStyleReferenced[fromSheet]);
     }
   }
 
@@ -195,8 +193,7 @@ class Excel {
   ///
   ///
   void rename(String oldSheetName, String newSheetName) {
-    if (_isContain(_sheetMap[oldSheetName]) &&
-        !_isContain(_sheetMap[newSheetName])) {
+    if (_isContain(_sheetMap[oldSheetName]) && !_isContain(_sheetMap[newSheetName])) {
       ///
       /// rename from _defaultSheet var also
       if (_defaultSheet == oldSheetName) {
@@ -249,31 +246,20 @@ class Excel {
     ///
     /// remove from `_xmlSheetId`.
     if (_isContain(_xmlSheetId[sheet])) {
-      String sheetId1 = "worksheets" +
-              _xmlSheetId[sheet].toString().split('worksheets')[1].toString(),
-          sheetId2 = _xmlSheetId[sheet];
+      String sheetId1 = "worksheets" + _xmlSheetId[sheet].toString().split('worksheets')[1].toString(), sheetId2 = _xmlSheetId[sheet];
 
-      _xmlFiles['xl/_rels/workbook.xml.rels']
-          .rootElement
-          .children
-          .removeWhere((_sheetName) {
-        return _sheetName.getAttribute('Target') != null &&
-            _sheetName.getAttribute('Target').toString() == sheetId1;
+      _xmlFiles['xl/_rels/workbook.xml.rels'].rootElement.children.removeWhere((_sheetName) {
+        return _sheetName.getAttribute('Target') != null && _sheetName.getAttribute('Target').toString() == sheetId1;
       });
 
-      _xmlFiles['[Content_Types].xml']
-          .rootElement
-          .children
-          .removeWhere((_sheetName) {
-        return _sheetName.getAttribute('PartName') != null &&
-            _sheetName.getAttribute('PartName').toString() == '/' + sheetId2;
+      _xmlFiles['[Content_Types].xml'].rootElement.children.removeWhere((_sheetName) {
+        return _sheetName.getAttribute('PartName') != null && _sheetName.getAttribute('PartName').toString() == '/' + sheetId2;
       });
 
       ///
       /// Remove from the `_archive` also
       _archive.files.removeWhere((file) {
-        return file.name.toLowerCase() ==
-            _xmlSheetId[sheet].toString().toLowerCase();
+        return file.name.toLowerCase() == _xmlSheetId[sheet].toString().toLowerCase();
       });
 
       ///
@@ -291,13 +277,8 @@ class Excel {
       ///
       /// Remove from `xl/workbook.xml`
       ///
-      _xmlFiles['xl/workbook.xml']
-          .findAllElements('sheets')
-          .first
-          .children
-          .removeWhere((element) {
-        return element.getAttribute('name') != null &&
-            element.getAttribute('name').toString() == sheet;
+      _xmlFiles['xl/workbook.xml'].findAllElements('sheets').first.children.removeWhere((element) {
+        return element.getAttribute('name') != null && element.getAttribute('name').toString() == sheet;
       });
 
       _sheets.remove(sheet);
@@ -317,7 +298,7 @@ class Excel {
   ///
   ///
   ///
-  Future<List<int>> encode() async {
+  List<int> encode() {
     Save s = Save._(this, parser);
     return s._save();
   }
@@ -346,16 +327,14 @@ class Excel {
   ///
   ///
   Future<String> _getDefaultSheet() async {
-    XmlElement _sheet =
-        _xmlFiles['xl/workbook.xml'].findAllElements('sheet').first;
+    XmlElement _sheet = _xmlFiles['xl/workbook.xml'].findAllElements('sheet').first;
 
     if (_sheet != null) {
       var defaultSheet = _sheet.getAttribute('name');
       if (defaultSheet != null) {
         return defaultSheet.toString();
       } else {
-        _damagedExcel(
-            text: 'Excel sheet corrupted!! Try creating new excel file.');
+        _damagedExcel(text: 'Excel sheet corrupted!! Try creating new excel file.');
       }
     }
     return null;
@@ -403,9 +382,7 @@ class Excel {
   ///
   ///
   void removeColumn(String sheet, int columnIndex) {
-    if (columnIndex != null &&
-        columnIndex >= 0 &&
-        _isContain(_sheetMap[sheet])) {
+    if (columnIndex != null && columnIndex >= 0 && _isContain(_sheetMap[sheet])) {
       _sheetMap[sheet].removeColumn(columnIndex);
     }
   }
@@ -475,15 +452,12 @@ class Excel {
   ///
   ///
   ///
-  void insertRowIterables(String sheet, List<dynamic> row, int rowIndex,
-      {int startingColumn = 0, bool overwriteMergedCells = true}) {
+  void insertRowIterables(String sheet, List<dynamic> row, int rowIndex, {int startingColumn = 0, bool overwriteMergedCells = true}) {
     if (rowIndex == null || rowIndex < 0) {
       return;
     }
     _availSheet(sheet);
-    _sheetMap['$sheet'].insertRowIterables(row, rowIndex,
-        startingColumn: startingColumn,
-        overwriteMergedCells: overwriteMergedCells);
+    _sheetMap['$sheet'].insertRowIterables(row, rowIndex, startingColumn: startingColumn, overwriteMergedCells: overwriteMergedCells);
   }
 
   ///
@@ -510,12 +484,7 @@ class Excel {
   ///
   ///
   ///
-  int findAndReplace(String sheet, dynamic source, dynamic target,
-      {int first = -1,
-      int startingRow = -1,
-      int endingRow = -1,
-      int startingColumn = -1,
-      int endingColumn = -1}) {
+  int findAndReplace(String sheet, dynamic source, dynamic target, {int first = -1, int startingRow = -1, int endingRow = -1, int startingColumn = -1, int endingColumn = -1}) {
     int replaceCount = 0;
 
     return replaceCount;
@@ -550,8 +519,7 @@ class Excel {
   ///
   ///
   ///
-  void updateCell(String sheet, CellIndex cellIndex, dynamic value,
-      {CellStyle cellStyle}) {
+  void updateCell(String sheet, CellIndex cellIndex, dynamic value, {CellStyle cellStyle}) {
     if (cellIndex == null) {
       return;
     }
@@ -576,8 +544,7 @@ class Excel {
   ///
   ///
   ///
-  void merge(String sheet, CellIndex start, CellIndex end,
-      {dynamic customValue}) {
+  void merge(String sheet, CellIndex start, CellIndex end, {dynamic customValue}) {
     if (start == null || end == null) {
       return;
     }
@@ -593,9 +560,7 @@ class Excel {
   ///
   ///
   List<String> getMergedCells(String sheet) {
-    return _isContain(_sheetMap[sheet])
-        ? List<String>.of(_sheetMap[sheet].spannedItems)
-        : <String>[];
+    return _isContain(_sheetMap[sheet]) ? List<String>.of(_sheetMap[sheet].spannedItems) : <String>[];
   }
 
   ///
